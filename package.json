@@ -12,10 +12,11 @@
   "scripts": {
     "build": "rm -r lib || true && babel src -d lib",
     "lint": "eslint src",
-    "test":       "npm run build && mocha tests --require babel-register --recursive",
+    "test": "npm run build && mocha tests --require babel-register --recursive",
     "test:watch": "SOURCE_DIR=src mocha tests --watch --recursive --require babel-register tests"
   },
   "dependencies": {
+    "ajv": "^4.11.5",
     "requireindex": "~1.1.0"
   },
   "devDependencies": {
