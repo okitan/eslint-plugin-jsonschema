@@ -12,9 +12,8 @@
   "scripts": {
     "build": "rm -r lib || true && babel src -d lib",
     "lint": "eslint src",
-    "test":       "mocha tests --require babel-register --recursive",
-    "test:watch": "mocha tests --watch --require babel-register tests",
-    "watch": "babel --watch src -d lib"
+    "test":       "npm run build && mocha tests --require babel-register --recursive",
+    "test:watch": "SOURCE_DIR=src mocha tests --watch --require babel-register tests"
   },
   "dependencies": {
     "requireindex": "~1.1.0"
@@ -26,11 +25,8 @@
     "babel-preset-env": "^1.2.1",
     "babel-register": "^6.24.0",
     "eslint": "^3.9.1",
-    "generator-eslint": "^1.2.0",
     "mocha": "^3.2.0",
-    "power-assert": "^1.4.2",
-    "watch-run": "^1.2.5",
-    "yo": "^1.8.5"
+    "power-assert": "^1.4.2"
   },
   "engines": {
     "node": ">=0.10.0"

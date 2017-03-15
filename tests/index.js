@@ -1,11 +1,11 @@
 "use strict"
 
-import a from "../lib"
+import { eslintPluginJsonschema } from "./import_helper"
 
 import assert from "power-assert"
 
 describe("eslint-plugin-jsonschema", () => {
   it("exports processor of json", () => {
-    assert( ".json" in a.processors )
+    assert( ".json" in eslintPluginJsonschema.processors )
   })
 })
