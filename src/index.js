@@ -1,6 +1,9 @@
 "use strict"
 
+import requireIndex from "requireindex"
+
 export default {
+  rules: requireIndex(__dirname + "/rules"),
   processors: {
     ".json": {
       preprocess: (text, fileName) => {
