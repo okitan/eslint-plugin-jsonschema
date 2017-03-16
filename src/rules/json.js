@@ -15,25 +15,34 @@ export const create = context => {
   try {
     JSON.parse(json)
   } catch(err) {
-    let position = parseInt(err.message.match(/(\d+)/)[0]);
+    // starts with 0
+    let position = parseInt(err.message.match(/(\d+)/)[0])
 
-    let length = 0;
-    let lines = json.split("\n");
-    for (let i in lines) {
-      let line = lines[i];
-      if (length <= position && length + line.length + 1 >= position) {
-        context.report({
-          message: err.message,
-          loc: {
-            start: { line: i, column: position - length },
-            end:   { line: i, column: position - length }
-          }
-        });
-        break;
-      }
-      length += line.length + 1; // "\n"
+    if (position == 0) {
+      context.report({
+        message: err.message,
+        loc: {
+          start: { line: 1, column: 0 }, // but column actually reported + 1
+          end:   { line: 1, column: 0 }
+        }
+      })
+    } else {
+      let length = 0;
+      json.split("\n").some((line, i) => {
+        let oldLength = length
+        length += line.length + 1 // "\n"
+        if (length > position) {
+          context.report({
+            message: err.message,
+            loc: {
+              start: { line: i + 1, column: position - oldLength },
+              end:   { line: i + 1, column: position - oldLength }
+            }
+          })
+          return true
+        }
+      })
     }
-    return {}
   }
 
   return {}
