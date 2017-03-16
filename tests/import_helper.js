@@ -7,5 +7,5 @@ let dir = process.env["SOURCE_DIR"] || "lib"
 
 export const ast = require(`../${dir}/ast`)
 
-export const eslintPluginJsonschema = require(`../${dir}`).default
+export const eslintPluginJsonschema = require(`../${dir}`)
 export const rules = requireIndex(__dirname + `/../${dir}/rules`)
