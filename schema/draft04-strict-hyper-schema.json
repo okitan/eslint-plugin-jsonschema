@@ -209,7 +209,8 @@
             "format": "uri"
         },
         "format": { "type": "string", "description": "added manually" },
-        "$ref":   { "type": "string", "description": "added manually" }
+        "$ref":   { "type": "string", "description": "added manually" },
+        "readOnly": { "type": "boolean", "description": "added manually" }
     },
     "dependencies": {
         "exclusiveMaximum": [ "maximum" ],

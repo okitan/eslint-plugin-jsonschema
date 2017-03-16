@@ -15,7 +15,7 @@ describe("jsonschema/validateSchema", () => {
   ]
 
   let inValidSchemas = [
-    { code: '{ "id": 0 }',  errors: [ { message: "/id should be string", line: 1, columun: 9 } ] },
+    { code: '{ "id": 0 }',  errors: [ { message: "#/properties/id/type: /id should be string", line: 1, columun: 9 } ] },
     { code: '{\n  "properties": {\n    "hoge": 0\n  }\n}', errors: [ { line: 3 }] }, // nested property
     { code: '{\n  "$schema": "http://json-schema.org/draft-04/hyper-schema#",\n  "links": 0\n}', errors: [ { line: 3 }] },
     { code: '{\n  "$schema": "http://json-schema.org/draft-04/hyper-schema#",\n  "links": [\n    { "href": "/" }\n  ]\n}', errors: [ { line: 4 }] }, // /links/0
@@ -33,7 +33,7 @@ describe("jsonschema/validateSchema", () => {
   ]
 
   let typoSchemas = [
-    { code: '{ "$schema": "http://json-schema.org/draft-04/hyper-schema#", "typo": "object" }', errors: [ { line: 1, message: "instance should NOT have additional properties typo" }] },
+    { code: '{ "$schema": "http://json-schema.org/draft-04/hyper-schema#", "typo": "object" }', errors: [ { line: 1, message: "#/additionalProperties: instance should NOT have additional properties typo" }] },
   ]
 
   ruleTester.run("against json hyper schema", rule, {

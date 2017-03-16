@@ -39,11 +39,12 @@ export const create = context => {
   }
 
   // helpers
-  const createMessage = error => {
+  const createMessage = (error, verbose = false) => {
     if (error.keyword == "additionalProperties" && error.dataPath == "") {
-      return `instance ${error.message} ${error.params.additionalProperty}`
+      return `${error.schemaPath}: instance ${error.message} ${error.params.additionalProperty}`
     }
-    return error.dataPath + " " + error.message
+
+    return `${error.schemaPath}: ${error.dataPath} ${error.message}`
   }
 
   const onNode = (errors, node) => {
@@ -65,7 +66,7 @@ export const create = context => {
 
   // validate
   let options = context.options[0] || {}
-  
+
   let validator
   if (options.strict) {
     validator = new Ajv({ meta: false, allErrors: true, jsonPointers: true })
