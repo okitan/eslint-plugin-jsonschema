@@ -1,26 +1,25 @@
 "use strict"
 
-const parentProperty = (property) => {
-  let candidate = property.parent
-
-  while (candidate) {
-    if (candidate.type == "Property") {
-      return candidate
-    }
-    candidate = candidate.parent
-  }
-
-  return null
-}
-
 export const calculateJsonPointer = (node) => {
-  let stack = [ node.key.value ]
+  let stack  = ""
+  let parent = node.parent
 
-  let target = parentProperty(node)
-  while (target && target.key) { // root has no key
-    stack.unshift(target.key.value)
-    target = parentProperty(target)
+  if (node.type == "Property") {
+    stack += node.key.value
   }
 
-  return "/" + stack.join("/")
+  if (parent) {
+    if (parent.type == "ObjectExpression") {
+      stack = "/" + stack
+    }
+
+    if (parent.type == "ArrayExpression") {
+      let i = parent.elements.findIndex(e => e == node)
+      stack = "/" + i + stack
+    }
+
+    return calculateJsonPointer(parent) + stack
+  } else {
+    return stack
+  }
 }
