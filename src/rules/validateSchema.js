@@ -1,5 +1,7 @@
 "use strict"
 
+import { unwrapJson } from "../util"
+
 import Ajv from "ajv"
 
 export const meta = {
@@ -12,7 +14,7 @@ export const meta = {
 }
 
 export const create = context => {
-  let json = context.getSourceCode().getText().substring(11) // remove "var json = "
+  let json = unwrapJson(context.getSourceCode().getText())
 
   let targetSchema
   try {

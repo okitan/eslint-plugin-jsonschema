@@ -1,5 +1,7 @@
 "use strict"
 
+import { wrapJson } from "./util"
+
 import requireIndex from "requireindex"
 
 export default {
@@ -7,9 +9,7 @@ export default {
   processors: {
     ".json": {
       preprocess: (text, fileName) => {
-        // TODO: DRY var json =
-        let jsText = "var json = " + text
-        return [ jsText ]
+        return [ wrapJson(text) ]
       },
       postprocess: (messages, fileName) => {
         return messages[0]

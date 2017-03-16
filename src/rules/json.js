@@ -1,5 +1,7 @@
 "use strict"
 
+import { unwrapJson } from "../util"
+
 export const meta = {
   docs: {
     description: "check schema is valid json",
@@ -10,7 +12,7 @@ export const meta = {
 }
 
 export const create = context => {
-  let json = context.getSourceCode().getText().substring(11) // remove "var json = "
+  let json = unwrapJson(context.getSourceCode().getText())
 
   try {
     JSON.parse(json)
