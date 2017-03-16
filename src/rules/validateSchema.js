@@ -40,11 +40,19 @@ export const create = context => {
 
   // helpers
   const createMessage = (error, verbose = false) => {
-    if (error.keyword == "additionalProperties" && error.dataPath == "") {
-      return `${error.schemaPath}: instance ${error.message} ${error.params.additionalProperty}`
+    let target = error.dataPath
+
+    if (error.dataPath == "") {
+      target = "instance"
     }
 
-    return `${error.schemaPath}: ${error.dataPath} ${error.message}`
+    // optional info
+    let option = ""
+    if (error.keyword == "additionalProperties") {
+      option = error.params.additionalProperty
+    }
+
+    return `${error.schemaPath}: ${[ target, error.message, option ].filter(text => text).join(" ")}`
   }
 
   const onNode = (errors, node) => {
