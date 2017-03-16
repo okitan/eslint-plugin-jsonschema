@@ -1,12 +1,12 @@
 "use strict"
 
 import { rules } from "../import_helper"
-let rule = rules.valid
+let rule = rules.validateSchema
 
 import { RuleTester } from "eslint"
 let ruleTester = new RuleTester()
 
-describe("jsonschema/validate", () => {
+describe("jsonschema/validateSchema", () => {
   let validSchemas = [
     '{}'
   ]
