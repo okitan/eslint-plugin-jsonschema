@@ -1,8 +1,11 @@
 "use strict"
 
-import { unwrapJson } from "../util"
+import { calculateJsonPointer } from "../ast"
+import { unwrapJson }           from "../util"
 
 import Ajv from "ajv"
+
+import fs  from "fs"
 
 export const meta = {
   docs: {
@@ -24,50 +27,37 @@ export const create = context => {
     return {}
   }
 
-  // Helper
-  var parentProperty = function(property) {
-    var parent = property.parent.parent;
-
-    if (parent) {
-      switch (parent.type) {
-        case "ArrayExpression":
-          return parent.parent;
-        default:
-          return parent;
-      }
-    }
-
-    return undefined;
-  }
-
-  var calculateJsonPointer = function(node) {
-    var stack  = [ node.key.value ];
-
-    var target = parentProperty(node);
-    while (target && target.key) { // root has no key
-      stack.unshift(target.key.value);
-      target = parentProperty(target);
-    }
-
-    return stack.join(".")
-  }
-
-  var findErrorForNode = function(node, error) {
-    return ("." + calculateJsonPointer(node)) == error.dataPath;
-  }
-
   // validate
-  let validator = new Ajv({ allErrors: true, sourceCode: true })
+  let validator = new Ajv({ allErrors: true, jsonPointers: true })
+
+  // add schemas
+  validator.addMetaSchema(JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft-04/hyper-schema.json")))
+
   let result = validator.validateSchema(targetSchema)
   if (result) {
     return {}
   }
 
+  let errors  = validator.errors
   return {
+    "Program:exit": node => {
+      if (errors.length > 0) {
+        errors.forEach(error => {
+          context.report({
+            node,
+            message: error.dataPath + " " + error.message
+          })
+        })
+      }
+    },
     Property: node => {
-      var error = validator.errors.find(findErrorForNode.bind(undefined, node));
+      var error = errors.find(error => {
+        return (calculateJsonPointer(node)) == error.dataPath;
+      })
+
 
       if (error) {
+        errors = errors.filter(e => e !== error)
         context.report({
           node,
           message: error.dataPath + " " + error.message
