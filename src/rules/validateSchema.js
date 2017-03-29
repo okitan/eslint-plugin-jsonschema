@@ -56,12 +56,12 @@ export const create = context => {
   }
 
   const onNode = (errors, node) => {
-    let error = errors.find(error => {
+    let i = errors.findIndex(error => {
       return (calculateJsonPointer(node)) == error.dataPath;
     })
 
-    if (error) {
-      let i = errors.findIndex(e => e !== error)
+    if (i >= 0) {
+      let error = errors[i]
       errors.splice(i, 1)
 
       context.report({
