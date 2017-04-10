@@ -78,15 +78,28 @@ export const create = context => {
   // validate
   let options = context.options[0] || {}
 
-  let validator
+  let validator = new Ajv({ meta: false, allErrors: true, jsonPointers: true })
+
+  // add Schema
+  let schema      = JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft-04/schema.json"))
+  let hyperSchema = JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft-04/hyper-schema.json"))
   if (options.strict) {
-    validator = new Ajv({ meta: false, allErrors: true, jsonPointers: true })
-    validator.addMetaSchema(JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft04-strict-schema.json")))
-    validator.addMetaSchema(JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft04-strict-hyper-schema.json")))
-  } else {
-    validator = new Ajv({ allErrors: true, jsonPointers: true })
-    validator.addMetaSchema(JSON.parse(fs.readFileSync(__dirname + "/../../schema/draft-04/hyper-schema.json")))
+    schema.properties.format    = { type: "string" }
+    schema.properties["$ref"]   = { type: "string" }
+    schema.additionalProperties = false
+
+    // merge allOf of hyper-schema
+    delete hyperSchema["allOf"]
+    hyperSchema.definitions = Object.assign({}, schema.definitions, hyperSchema.definitions)
+    hyperSchema.properties  = Object.assign({}, schema.properties,  hyperSchema.properties)
+
+    hyperSchema.properties.readOnly  = { type: "boolean" }
+    hyperSchema.additionalProperties = false
   }
+
+  validator.addMetaSchema(schema)
+  validator.addMetaSchema(hyperSchema)
+
 
   let result = validator.validateSchema(targetSchema)
   if (result) {

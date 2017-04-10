@@ -140,14 +140,11 @@
         "allOf": { "$ref": "#/definitions/schemaArray" },
         "anyOf": { "$ref": "#/definitions/schemaArray" },
         "oneOf": { "$ref": "#/definitions/schemaArray" },
-        "not": { "$ref": "#" },
-        "format": { "type": "string", "description": "added manually" },
-        "$ref":   { "type": "string", "description": "added manually" }
+        "not": { "$ref": "#" }
     },
     "dependencies": {
         "exclusiveMaximum": [ "maximum" ],
         "exclusiveMinimum": [ "minimum" ]
     },
-    "default": {},
-    "additionalProperties": false, "description": "<- for strict property checking"
+    "default": {}
 }
