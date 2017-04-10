@@ -67,7 +67,10 @@ export const create = context => {
       context.report({
         node,
         message: createMessage(error)
-      });
+      })
+
+      // do check errors again
+      onNode(errors, node)
     }
   }
 
