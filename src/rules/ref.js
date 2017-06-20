@@ -4,25 +4,6 @@ import { unwrapJson } from "../util"
 import RefContext     from "../refContext"
 import jsonpointer    from "jsonpointer"
 
-function isObject(v) {
-  return typeof v === 'object' && v !== null && !Array.isArray(v);
-}
-
-function traverseRef(schema, cb) {
-  if (isObject(schema)) {
-    const ref = schema["$ref"];
-    if (ref) cb(ref);
-
-    for (const key of Object.keys(schema)) {
-      traverseRef(schema[key], cb)
-    }
-  } else if (Array.isArray(schema)) {
-    for (const val of schema) {
-      traverseRef(val, cb)
-    }
-  }
-}
-
 export const meta = {
   docs: {
     description: "check $ref is valid",
@@ -34,7 +15,7 @@ export const meta = {
 
 export const create = context => {
   let json = unwrapJson(context.getSourceCode().getText())
-
+  
   let targetSchema
   try {
     targetSchema = JSON.parse(json);
@@ -43,7 +24,10 @@ export const create = context => {
     return {}
   }
 
-  traverseRef(targetSchema, ref => {
+  const onProperty = node => {
+    if (node.key.value !== '$ref') return;
+
+    const ref = node.value.value;
     const [id, pointer] = ref.split("#")
 
     let passed;
@@ -54,16 +38,14 @@ export const create = context => {
     }
 
     if (!passed) {
-      // TODO
       context.report({
-        message: `cannot resolve ref: ${ref}`,
-        loc: {
-          start: { line: 1, column: 0 },
-          end:   { line: 1, column: 0 },
-        },
+        message: `cannot resolve ref: "${ref}"`,
+        node: node.value,
       })
     }
-  });
+  };
 
-  return {}
+  return {
+    Property: onProperty,
+  }
 }
