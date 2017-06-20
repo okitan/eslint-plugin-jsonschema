@@ -19,23 +19,12 @@ class RefContext {
     this.cached = false;
     this.schemaMap = {};
   }
-  resolve(context) {
+  resolveDirs(contextDirectories) {
     if (this.cached) return
     this.cached = true;
 
-    let contextDirectory =
-      context.settings &&
-      context.settings["jsonschema"] &&
-      context.settings["jsonschema"]["schemaDirectory"];
-    if (!contextDirectory) {
-      contextDirectory = [ "." ];
-    }
-    if (typeof contextDirectory === "string") {
-      contextDirectory = [ contextDirectory ];
-    }
-
     const files = [];
-    for (const dir of contextDirectory) {
+    for (const dir of contextDirectories) {
       iterateDirectory(dir, file => {
         // TODO: ext options?
         if (!file.match(/\.json/)) return;
@@ -60,6 +49,21 @@ class RefContext {
 
       this.schemaMap[id] = schema;
     }
+  }
+  resolve(context) {
+
+    let contextDirectory =
+      context.settings &&
+      context.settings["jsonschema"] &&
+      context.settings["jsonschema"]["schemaDirectory"];
+    if (!contextDirectory) {
+      contextDirectory = [ "." ];
+    }
+    if (typeof contextDirectory === "string") {
+      contextDirectory = [ contextDirectory ];
+    }
+
+    this.resolveDirs(contextDirectory);
   }
   contains(context, ref) {
     this.resolve(context);
