@@ -26,7 +26,7 @@ class RefContext {
     let contextDirectory =
       context.settings &&
       context.settings["jsonschema"] &&
-      context.settings["jsonschema"]["contextDirectory"];
+      context.settings["jsonschema"]["schemaDirectory"];
     if (!contextDirectory) {
       contextDirectory = [ "." ];
     }
