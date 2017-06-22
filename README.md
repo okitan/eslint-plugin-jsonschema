@@ -26,7 +26,12 @@ Add `jsonschema` to the plugins section of your `.eslintrc` configuration file. 
 {
     "plugins": [
         "jsonschema"
-    ]
+    ],
+    "settings": {
+        "jsonschema": {
+            "schemaDirectory": [ "/path/to/schema" ]
+        }
+    }
 }
 ```
 
