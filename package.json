@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-jsonschema",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "eslint plugin for jsonschema",
   "keywords": [
     "eslint",
@@ -16,9 +16,9 @@
     "test:watch": "SOURCE_DIR=src mocha tests --watch --recursive --require babel-register tests"
   },
   "dependencies": {
-    "ajv": "^4.11.5",
+    "ajv": "^4.11.8",
     "jsonpointer": "^4.0.1",
-    "requireindex": "~1.1.0"
+    "requireindex": "^1.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
