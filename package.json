@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "ajv": "^4.11.5",
+    "jsonpointer": "^4.0.1",
     "requireindex": "~1.1.0"
   },
   "devDependencies": {
