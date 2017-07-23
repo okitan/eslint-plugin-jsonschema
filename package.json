@@ -24,9 +24,9 @@
     "babel-cli": "^6.24.0",
     "babel-eslint": "^7.1.1",
     "babel-plugin-espower": "^2.3.2",
-    "babel-preset-env": "^1.2.1",
+    "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.0",
-    "eslint": "^3.9.1",
+    "eslint": "~3.9.1",
     "mocha": "^3.2.0",
     "power-assert": "^1.4.2"
   },

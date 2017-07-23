@@ -4,7 +4,7 @@ import { ast } from "./import_helper"
 let { calculateJsonPointer } = ast
 
 import assert  from "power-assert"
-import esprima from "esprima"
+import { parse } from "esprima"
 
 const getNodeWithParent  = (root, items) => {
   let tmp    = root
@@ -28,7 +28,7 @@ describe("ast2jsonPointer", () => {
           key: "value"
         }
       }
-      let ast     = esprima.parse("var json = " + JSON.stringify(object))
+      let ast     = parse("var json = " + JSON.stringify(object))
       let jsonAst = ast.body[0].declarations[0].init
 
       let node = getNodeWithParent(jsonAst, [ "properties", 0, "value", "properties", 0])
@@ -42,7 +42,7 @@ describe("ast2jsonPointer", () => {
           { key: "value" }
         ]
       }
-      let ast     = esprima.parse("var json = " + JSON.stringify(object))
+      let ast     = parse("var json = " + JSON.stringify(object))
       let jsonAst = ast.body[0].declarations[0].init
 
       let node = getNodeWithParent(jsonAst, [ "properties", 0, "value" ])
@@ -68,7 +68,7 @@ describe("ast2jsonPointer", () => {
           }
         ]
       }
-      let ast     = esprima.parse("var json = " + JSON.stringify(object))
+      let ast     = parse("var json = " + JSON.stringify(object))
       let jsonAst = ast.body[0].declarations[0].init
 
       let node = getNodeWithParent(jsonAst, [ "properties", 0, "value", "elements", 0, "properties", 1, "value", "elements", 1, "properties", 0 ])
