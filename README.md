@@ -1,5 +1,7 @@
 # eslint-plugin-jsonschema
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/okitan/eslint-plugin-jsonschema.svg)](https://greenkeeper.io/)
+
 eslint plugin for jsonschema
 
 ## Installation
